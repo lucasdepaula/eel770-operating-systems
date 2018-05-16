@@ -25,5 +25,16 @@
                 </tr>
             </table>
         </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+            var socket = io('http://localhost');
+
+            socket.on('msgParaCliente', function(msg){
+                alert(msg.mensagem);
+            });
+        </script>
+
     </body>
 </html>

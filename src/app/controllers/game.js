@@ -12,5 +12,10 @@ module.exports.show = function(application,req,res){
         return;
     }
 
+    application.get('io').emit(
+        'msgParaCliente',
+        {apelido: dadosForm.apelido, mensagem: 'O seu oponente chegou!'}
+    )
+
     res.render('game');
 }

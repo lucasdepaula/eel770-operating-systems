@@ -4,4 +4,10 @@ var server = app.listen(80, function(){
     console.log("Servidor online");
 });
 
-require('socket.io').listen(server);
+var io = require('socket.io').listen(server);
+
+app.set('io', io);
+
+io.on('connection', function(socket){
+    console.log('Jogador connectou');
+});
