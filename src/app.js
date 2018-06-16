@@ -1,26 +1,29 @@
-var cluster = require('cluster')
+const clus = require('clusterws');
 var container = [];
-if(cluster.isMaster) {
-    var cpuCount = require('os').cpus().length;
+const cws = new clus({
+    worker: Worker,
+    workers: 2,//require('os').cpus().length,
+    port: 8000
+});
 
-    // Cria um processo filho pra cada core
-    for (var i = 0; i < cpuCount; i += 1) {
-        var wrkr = cluster.fork();
+function Worker() {
+    const wss = this.wss;
+    const sv = this.server;
 
-        container[i]=wrkr;
-    }
-} else {
     var app = require('./config/server');
 
-    var server = app.listen(8000, function(){
-        console.log("Servidor online");
+    //var server = app.listen(8000, function(){
+    //    console.log("Servidor online");
+    //});
+
+    //var io = require('socket.io').listen(server);
+    sv.on('request', app);
+    //app.set('io', io);
+
+    wss.on('connection', (socket) => {
+        console.log('Jogador connectou ao processo ' + require('process').pid);
     });
-
-    var io = require('socket.io').listen(server);
-
-    app.set('io', io);
-
-    io.on('connection', function(socket){
-        console.log('Jogador connectou ao processo ' + cluster.worker.id);
-    });
+    // io.on('connection', function(socket){
+    //     console.log('Jogador connectou ao processo ' + require('process').pid);
+    // });
 }

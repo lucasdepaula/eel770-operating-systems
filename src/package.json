@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "clusterws": "^3.0.6",
+    "clusterws-client-js": "^3.0.5",
     "consign": "^0.1.6",
     "ejs": "^2.5.8",
     "express": "^4.16.3",

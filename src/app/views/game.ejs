@@ -31,7 +31,7 @@
             </div>
             <div class="row" id="chatboard">
                 <div class="col-md-6">
-                    <textarea name="logChat" id="logChat" readonly></textarea>
+                    <textarea name="logChat" id="logChat" readonly><%=msgLog%></textarea>
                 </div>
                 <div class="col-md-6">
                         <textarea name="inputChat" id="inputChat"></textarea>
@@ -40,15 +40,34 @@
             </div>
         </div>
         <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
+        <!-- <script src="/socket.io/socket.io.js"></script> -->
+        <script src="js/clusterws.js"></script>
         <script src="js/game.js"></script>
 
         <script>
-            var socket = io('http://localhost:8000');
-
-            socket.on('msgParaCliente', function(msg){
-                alert(msg.mensagem);
+            var hash_chat_channel = '<%=chat_channel%>';
+            var apelido = '<%=apelido%>';
+            var chat_channel;
+            const btnEnviar = document.getElementById('submitChat');
+            const logChat = document.getElementById('logChat');
+            const inputChat = document.getElementById('inputChat');
+            let socket = new ClusterWS({
+                port: 8000,
+                url: 'ws://127.0.0.1:8000'
             });
+
+            socket.on('connect', () => {
+                chat_channel = socket.subscribe('<%=chat_channel%>').watch((channelMessage) => {
+                    console.log(channelMessage)
+                    logChat.value += "\n" + channelMessage;
+                });
+            });
+            
+            btnEnviar.onclick = function() {
+                // adicionar codigo do envio aqui.
+                chat_channel.publish(apelido + ": "+inputChat.value);
+                inputChat.value = "";
+            };
         </script>
 
     </body>
