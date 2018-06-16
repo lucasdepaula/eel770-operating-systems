@@ -1,13 +1,26 @@
-var app = require('./config/server');
+var cluster = require('cluster')
+var container = [];
+if(cluster.isMaster) {
+    var cpuCount = require('os').cpus().length;
 
-var server = app.listen(80, function(){
-    console.log("Servidor online");
-});
+    // Cria um processo filho pra cada core
+    for (var i = 0; i < cpuCount; i += 1) {
+        var wrkr = cluster.fork();
 
-var io = require('socket.io').listen(server);
+        container[i]=wrkr;
+    }
+} else {
+    var app = require('./config/server');
 
-app.set('io', io);
+    var server = app.listen(8000, function(){
+        console.log("Servidor online");
+    });
 
-io.on('connection', function(socket){
-    console.log('Jogador connectou');
-});
+    var io = require('socket.io').listen(server);
+
+    app.set('io', io);
+
+    io.on('connection', function(socket){
+        console.log('Jogador connectou ao processo ' + cluster.worker.id);
+    });
+}

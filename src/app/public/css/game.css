@@ -8,3 +8,15 @@ td button{
     width: 100%;
     height: 100%;
 }
+
+table#gameboard {
+    margin: 0 auto 50px;
+}
+#chatboard textarea {
+    width: 100%;
+    height: 100px;
+}
+
+textarea[readonly] {
+    background: #eee;
+}

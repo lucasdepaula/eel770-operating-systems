@@ -7,29 +7,44 @@
     <body>
         <div class="container">
             <h1>GameBoard</h1>
-            <table>
-                <tr>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                </tr>
-                <tr>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                </tr>
-                <tr>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                    <td><button></button></td>
-                </tr>
-            </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="gameboard">
+                        <tr>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                        </tr>
+                        <tr>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                        </tr>
+                        <tr>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                            <td><button></button></td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+            <div class="row" id="chatboard">
+                <div class="col-md-6">
+                    <textarea name="logChat" id="logChat" readonly></textarea>
+                </div>
+                <div class="col-md-6">
+                        <textarea name="inputChat" id="inputChat"></textarea>
+                    <button id="submitChat">Enviar</button>
+                </div>
+            </div>
         </div>
-
+        <script src="js/jquery-3.3.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="js/game.js"></script>
 
         <script>
-            var socket = io('http://localhost');
+            var socket = io('http://localhost:8000');
 
             socket.on('msgParaCliente', function(msg){
                 alert(msg.mensagem);
