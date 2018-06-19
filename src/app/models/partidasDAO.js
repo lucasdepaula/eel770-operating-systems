@@ -15,7 +15,7 @@ PartidasDAO.prototype.criarPartida = function(numero, jogador){
     
 }
 
-PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat){
+PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat, game_channel){
     var MongoClient = require('mongodb').MongoClient;
     dadosForm = req.body;
     console.log('entrar partida');
@@ -34,7 +34,7 @@ PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat
                 console.log(resultado.players);
                 collection.updateOne(obj, {$push:{players:{apelido: jogador}}}, function(err, result){
                     if (err) throw err;
-                    res.render('game',{apelido: dadosForm.apelido, room_number: parseInt(req.body.sala), msgLog: "Você foi conectado a sala "+req.body.sala+" a partida será iniciada em instantes.",chat_channel:chat, game_channel: {}});
+                    res.render('game',{apelido: dadosForm.apelido, room_number: parseInt(req.body.sala), msgLog: "Você foi conectado a sala "+req.body.sala+" a partida será iniciada em instantes.",chat_channel:chat, game_channel: game_channel});
                     client.close();
                     return true;
                 });

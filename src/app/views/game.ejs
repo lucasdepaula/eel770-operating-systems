@@ -61,8 +61,10 @@
                     logChat.value += "\n" + channelMessage;
                 });
                 game_channel = socket.subscribe('<%=game_channel%>').watch((channelMessage) => {
-                    console.log(channelMessage)
                     logChat.value += "\n" + channelMessage;
+                    if(channelMessage != apelido + " jogou"){
+                        logChat.value += "\n" + 'Sua vez!';
+                    }
                 });
             });
             socket.on('iniciarPartida', function(){
@@ -79,11 +81,13 @@
                     success: function(data, status, xhr){
                         console.log(data);
                         pintarTela(id);
+                        game_channel.publish(apelido + " jogou");
                     },
                     error: function (err, status, xhr){
                         logChat.value+="\n" + err.responseJSON.msg;
                     }
                 });
+
             });
 
 
