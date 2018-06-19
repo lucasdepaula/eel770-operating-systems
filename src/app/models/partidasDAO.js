@@ -5,7 +5,7 @@ function PartidasDAO(conexao){
 PartidasDAO.prototype.criarPartida = function(numero, jogador){
     var MongoClient = require('mongodb').MongoClient;
     console.log('criar partida');
-    var obj = {sala: numero, players:[{apelido: jogador}], vez: 1};
+    var obj = {sala: numero, players:[{apelido: jogador}], vez: 1, tabuleiro:[0,0,0,0,0,0,0,0,0]};
     MongoClient.connect(this._conexao,function(err, client){
         const db = client.db('tictactoe');
         const collection = db.collection('partidas');
@@ -95,7 +95,7 @@ PartidasDAO.prototype.eMinhaVez = function(sala, id_partida, callback_sucesso, c
     });
 }
 
-PartidasDAO.prototype.atualizarTabuleiro = function(busca, id_partida, callback_sucesso, callback_erro){
+PartidasDAO.prototype.atualizarTabuleiro = function(posicao,busca, id_partida, callback_sucesso, callback_erro){
     var MongoClient = require('mongodb').MongoClient;
     console.log(busca);
     MongoClient.connect(this._conexao,function(err, client){
@@ -103,10 +103,23 @@ PartidasDAO.prototype.atualizarTabuleiro = function(busca, id_partida, callback_
         const collection = db.collection('partidas');
         var next = (id_partida==1) ? 2 : 1;
         console.log(next);
-        collection.updateOne(busca, {$set:{vez:next}}, function(err, result){
-            if (err) throw err;
-            console.log('Passei a vez!');
+        collection.findOne(busca,{projection:{_id:0, tabuleiro:1}}, function(err, gameboard){
+            if(err) console.log('[ERROR] Buscar o tabuleiro no banco');
+            if(gameboard.tabuleiro[parseInt(posicao)]!=0) {
+                callback_erro();
+            }
+            else {
+                // atualiza o tabuleiro
+                gameboard.tabuleiro[posicao] = id_partida;
+                console.log('Status: ' + gameboard.tabuleiro);
+                collection.updateOne(busca, {$set:{tabuleiro:gameboard.tabuleiro, vez: next}}, function(err, atualizado){
+                    if (err) throw err;
+                    console.log('[INFO] Tabuleiro atualizado em memoria. Passei a vez');
+                    callback_sucesso();
+                });
+            }
         });
+        
     });
 }
 module.exports = function(){ return PartidasDAO; }

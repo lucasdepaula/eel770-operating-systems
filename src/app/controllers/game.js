@@ -67,14 +67,15 @@ module.exports.efetuarJogada = function(application,req,res){
         partidasDAO.eMinhaVez(result_partida.sala, result_partida.id_partida, function(){
             //realizo a jogada e passo a vez pro proximo
             console.log('É a sua vez!');
-            partidasDAO.atualizarTabuleiro({sala:{$eq:parseInt(result_partida.sala)}},result_partida.id_partida, function(){
+            partidasDAO.atualizarTabuleiro(req.body.ind,{sala:{$eq:parseInt(result_partida.sala)}},result_partida.id_partida, function(){
                 //callback de sucesso
-                console.log('Tabuleiro atualizado.'); 
+                console.log('Tabuleiro atualizado.');
+                res.json({status: 'OK'});
             }, function(){
                 // callback de erro
-                console.log('Erro ao atualizar o tabuleiro');
+                res.status(400).json({msg: "Essa casa ja esta ocupada."});
             });
-            res.json({status: 'OK'});
+            
         },
         function() { // se nao for a vez
             res.status(400).json({msg: "É a vez do outro jogador, aguarde a sua vez."});
