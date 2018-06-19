@@ -47,7 +47,7 @@
         <script>
             var hash_chat_channel = '<%=chat_channel%>';
             var apelido = '<%=apelido%>';
-            var chat_channel;
+            var chat_channel, game_channel;
             const btnEnviar = document.getElementById('submitChat');
             const logChat = document.getElementById('logChat');
             const inputChat = document.getElementById('inputChat');
@@ -58,11 +58,20 @@
 
             socket.on('connect', () => {
                 chat_channel = socket.subscribe('<%=chat_channel%>').watch((channelMessage) => {
+                    logChat.value += "\n" + channelMessage;
+                });
+                game_channel = socket.subscribe('<%=game_channel%>').watch((channelMessage) => {
                     console.log(channelMessage)
                     logChat.value += "\n" + channelMessage;
                 });
             });
-            
+            $('#gameboard button').click(function(){
+                var id = $('#gameboard button').index(this);
+                pintarTela(id);
+                game_channel.publish(id+"_"+"jogada");
+            });
+
+
             btnEnviar.onclick = function() {
                 // adicionar codigo do envio aqui.
                 chat_channel.publish(apelido + ": "+inputChat.value);

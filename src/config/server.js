@@ -23,7 +23,8 @@ app.use(expressValidator());
 
 consign()
     .include('app/routes')
-    .include('app/models')
-    .include('app/controllers')
+    .then('config/dbconnection.js')
+    .then('app/models')
+    .then('app/controllers')
     .into(app); //carrega dentro do objeto app
 module.exports = app;
