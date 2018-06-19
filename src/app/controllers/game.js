@@ -19,19 +19,17 @@ module.exports.show = function(application,req,res){
 
     var connection = application.config.dbconnection;
     var partidasDAO = new application.app.models.partidasDAO(connection);
-
-    if(partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido)){
-        var chat_channel = crypto.createHmac('sha256', secret_chat_channel)
+    //var criei = partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido);
+    var chat_channel = crypto.createHmac('sha256', secret_chat_channel)
                         .update(dadosForm.sala)
                         .digest('hex');
-        var game_channel = crypto.createHmac('sha256', secret_game_channel)
+    var game_channel = crypto.createHmac('sha256', secret_game_channel)
                         .update(dadosForm.sala)
-                        .digest('hex');                   
-        res.render('game',{apelido: dadosForm.apelido, room_number: parseInt(req.body.sala), msgLog: "Você foi conectado a sala "+req.body.sala+" a partida será iniciada em instantes.",chat_channel:chat_channel, game_channel: game_channel});
-    }
-    else {
-        res.render('index', {validacao:{}, sala_cheia: true});
-    }
+                        .digest('hex');
+    partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido, req, res, chat_channel);
+        
+    partidasDAO.vinculaBrowser(req.headers.cookie, dadosForm.sala,2);                   
+    
 }
 
 module.exports.createroom = function(application,req,res){
@@ -47,7 +45,7 @@ module.exports.createroom = function(application,req,res){
     }
     var connection = application.config.dbconnection;
     var partidasDAO = new application.app.models.partidasDAO(connection);
-
+    partidasDAO.vinculaBrowser(req.headers.cookie, number, 1);
     partidasDAO.criarPartida(number, dadosForm.apelido);
     var chat_channel = crypto.createHmac('sha256', secret_chat_channel)
                        .update(number.toString())
@@ -58,3 +56,21 @@ module.exports.createroom = function(application,req,res){
     //console.log(chat_channel);
     res.render('game',{apelido: dadosForm.apelido,room_number: number, msgLog: "Sua sala foi criada. O número da sala é " + number + "\nAguardando o segundo jogador...", chat_channel: chat_channel,game_channel: game_channel});
 }
+
+module.exports.efetuarJogada = function(application,req,res){
+    //console.log(req.headers.cookie);
+    var connection = application.config.dbconnection;
+    var partidasDAO = new application.app.models.partidasDAO(connection);
+    // pego o id da partida
+    partidasDAO.buscaPartidaByCookie(req.headers.cookie, function(result_partida){
+        console.log('Encontrei o cookie na base - Sala ' + result_partida.sala + ' jogador ' + result_partida.id_partida);
+        partidasDAO.eMinhaVez(result_partida.sala, result_partida.id_partida, function(){
+            //realizo a jogada e passo a vez pro proximo
+            console.log('É a sua vez!');
+        },
+        function() { // se nao for a vez
+            console.log('Não é a sua vez, espere!');
+        });
+    });
+    res.send("valeu");
+};

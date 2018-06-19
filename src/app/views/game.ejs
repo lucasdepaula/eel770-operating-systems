@@ -67,8 +67,19 @@
             });
             $('#gameboard button').click(function(){
                 var id = $('#gameboard button').index(this);
-                pintarTela(id);
-                game_channel.publish(id+"_"+"jogada");
+                // pintarTela(id);
+                // game_channel.publish(id+"_"+"jogada");
+                $.ajax({
+                    type:'POST',
+                    url: '/jogada',
+                    data: {ind: id},
+                    success: function(data){
+                        pintarTela(id);
+                    },
+                    error: function (err){
+                        console.log('Erro');
+                    }
+                });
             });
 
 

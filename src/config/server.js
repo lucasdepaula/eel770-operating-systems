@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 
 var expressValidator = require('express-validator');
 
+// var expressSession = require('express-session');
+
 var app = express();
 
 
@@ -18,6 +20,11 @@ app.set('views', './app/views');
 app.use(express.static('./app/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressValidator());
+// app.use(expressSession({
+//     secret: 'pmM!x$jOUOV^$hDe0$s65jiA4JY8O0%bI3eon6#tL0Sb8KlK2T',
+//     resave: true,
+//     saveUninitialized: false
+// }));
 
 //incluindo diretorios no consign
 
