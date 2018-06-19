@@ -8,10 +8,10 @@ MongoClient.connect(url, function(err, db) {
    if (err) throw err;
    var dbo = db.db("tictactoe");
    dbo.collection("partidas").drop(function(err, delOK) {
-     if (err) console.log('Não consegui deletar a collection partidas. Possivelmente ela já nao existe.');
+     if (err) console.log('[WARNING] Não consegui deletar a collection partidas. Possivelmente ela já nao existe.');
      if (delOK) console.log("Collection partidas deleted... Iniciando...");
      dbo.collection("players").drop(function(err, delOK) {
-        if (err) console.log('Não consegui deletar a collection players. Possivelmente ela já nao existe.');
+        if (err) console.log('[WARNING] Não consegui deletar a collection players. Possivelmente ela já nao existe.');
         if (delOK) console.log("Collection players deleted... Iniciando...");
         db.close();
      });
