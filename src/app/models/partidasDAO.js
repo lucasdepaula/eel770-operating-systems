@@ -94,4 +94,19 @@ PartidasDAO.prototype.eMinhaVez = function(sala, id_partida, callback_sucesso, c
         });
     });
 }
+
+PartidasDAO.prototype.atualizarTabuleiro = function(busca, id_partida, callback_sucesso, callback_erro){
+    var MongoClient = require('mongodb').MongoClient;
+    console.log(busca);
+    MongoClient.connect(this._conexao,function(err, client){
+        const db = client.db('tictactoe');
+        const collection = db.collection('partidas');
+        var next = (id_partida==1) ? 2 : 1;
+        console.log(next);
+        collection.updateOne(busca, {$set:{vez:next}}, function(err, result){
+            if (err) throw err;
+            console.log('Passei a vez!');
+        });
+    });
+}
 module.exports = function(){ return PartidasDAO; }

@@ -65,6 +65,9 @@
                     logChat.value += "\n" + channelMessage;
                 });
             });
+            socket.on('iniciarPartida', function(){
+                logChat.value+="\n" + "A partida começou!";
+            });
             $('#gameboard button').click(function(){
                 var id = $('#gameboard button').index(this);
                 // pintarTela(id);
@@ -73,11 +76,12 @@
                     type:'POST',
                     url: '/jogada',
                     data: {ind: id},
-                    success: function(data){
+                    success: function(data, status, xhr){
+                        console.log(data);
                         pintarTela(id);
                     },
-                    error: function (err){
-                        console.log('Erro');
+                    error: function (err, status, xhr){
+                        logChat.value+="\n" + err.responseJSON.msg;
                     }
                 });
             });
