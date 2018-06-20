@@ -20,3 +20,8 @@ table#gameboard {
 textarea[readonly] {
     background: #eee;
 }
+
+#encerrar {
+    float: right;
+    font-size: 15px;
+}

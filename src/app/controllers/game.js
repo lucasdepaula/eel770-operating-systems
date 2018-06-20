@@ -107,3 +107,17 @@ module.exports.efetuarJogada = function(application,req,res){
         });
     });
 };
+
+module.exports.encerrar = function(application,req,res){
+    var connection = application.config.dbconnection;
+    var partidasDAO = new application.app.models.partidasDAO(connection);
+    // pego o id da partida
+    partidasDAO.buscaPartidaByCookie(req.headers.cookie, function(result_partida){
+        console.log('Encontrei o cookie na base - Sala ' + result_partida.sala + ' jogador ' + result_partida.id_partida);
+        if (result_partida.length>1) {
+            partidasDAO.encerrar(result_partida.sala, result_partida.id_partida);
+            console.log('Removeu registros do bd');
+        }
+        res.json({status: 'OK'});
+    });
+};
