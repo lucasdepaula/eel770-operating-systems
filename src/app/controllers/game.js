@@ -14,7 +14,7 @@ module.exports.show = function(application,req,res){
     var erros = req.validationErrors();
 
     if(erros){
-        res.render("index", {validacao : erros, sala_cheia:false})
+        res.render("index", {validacao : erros, sala_cheia:false, sala_inexistente: true})
         return;
     }
 
@@ -124,7 +124,7 @@ module.exports.encerrar = function(application,req,res){
     var connection = application.config.dbconnection;
     var partidasDAO = new application.app.models.partidasDAO(connection);
     // pego o id da partida
-    partidasDAO.buscaPartidaByCookie(req.headers.cookie, function(result_partida){
+    partidasDAO.buscaPartidaByCookie(req.body.uniq, function(result_partida){
         if (result_partida) {
             console.log('Encontrei o cookie na base - Sala ' + result_partida.sala + ' jogador ' + result_partida.id_partida);
             partidasDAO.encerrar(result_partida.sala, result_partida.id_partida);
