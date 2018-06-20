@@ -14,7 +14,7 @@ module.exports.show = function(application,req,res){
     var erros = req.validationErrors();
 
     if(erros){
-        res.render("index", {validacao : erros, sala_cheia:false, sala_inexistente: true})
+        res.render("index", {validacao : erros, sala_cheia:false, sala_inexistente: false})
         return;
     }
 
