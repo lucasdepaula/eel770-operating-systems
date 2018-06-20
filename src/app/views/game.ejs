@@ -59,11 +59,15 @@
             socket.on('connect', () => {
                 chat_channel = socket.subscribe('<%=chat_channel%>').watch((channelMessage) => {
                     logChat.value += "\n" + channelMessage;
+                    logChat.scrollTop = logChat.scrollHeight;
                 });
                 game_channel = socket.subscribe('<%=game_channel%>').watch((channelMessage) => {
                     logChat.value += "\n" + channelMessage;
+                    logChat.scrollTop = logChat.scrollHeight;
                     if(channelMessage != apelido + " jogou"){
                         logChat.value += "\n" + 'Sua vez!';
+                        logChat.scrollTop = logChat.scrollHeight;
+                        atualizarTabuleiro();
                     }
                 });
             });
@@ -85,6 +89,7 @@
                     },
                     error: function (err, status, xhr){
                         logChat.value+="\n" + err.responseJSON.msg;
+                        logChat.scrollTop = logChat.scrollHeight;
                     }
                 });
 
