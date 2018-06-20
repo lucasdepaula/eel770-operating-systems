@@ -78,13 +78,27 @@
                     data: {ind: id},
                     success: function(data, status, xhr){
                         console.log(data);
-                        pintarTela(id);
+                        atualizarTabuleiro();
                     },
                     error: function (err, status, xhr){
                         logChat.value+="\n" + err.responseJSON.msg;
                     }
                 });
             });
+            function atualizarTabuleiro() {
+                $.ajax({
+                    type:'POST',
+                    url: '/game/tabuleiro',
+                    data: {},
+                    success: function(data, status, xhr){
+                        console.log(data);
+                        pintarTela(data);
+                    },
+                    error: function (err, status, xhr){
+                        logChat.value+="\n" + err.responseJSON.msg;
+                    }
+                });
+            }
 
 
             btnEnviar.onclick = function() {

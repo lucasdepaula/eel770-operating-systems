@@ -28,7 +28,7 @@ module.exports.show = function(application,req,res){
                         .digest('hex');
     partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido, req, res, chat_channel);
         
-    partidasDAO.vinculaBrowser(req.headers.cookie, dadosForm.sala,2);                   
+    partidasDAO.vinculaBrowser(req.headers.cookie, parseInt(dadosForm.sala),2);                   
     
 }
 
@@ -55,6 +55,31 @@ module.exports.createroom = function(application,req,res){
                        .digest('hex');
     //console.log(chat_channel);
     res.render('game',{apelido: dadosForm.apelido,room_number: number, msgLog: "Sua sala foi criada. O número da sala é " + number + "\nAguardando o segundo jogador...", chat_channel: chat_channel,game_channel: game_channel});
+}
+
+module.exports.getTabuleiro = function(application,req,res) {
+    var connection = application.config.dbconnection;
+    var partidasDAO = new application.app.models.partidasDAO(connection);
+    // pego o id da partida
+    partidasDAO.buscaPartidaByCookie(req.headers.cookie, function(result_partida){
+        var MongoClient = require('mongodb').MongoClient;
+        MongoClient.connect(partidasDAO._conexao,function(err, client){
+            if(err) console.log('[ERROR] Problema ao conectar com o banco de dados - ' + err);
+            const db = client.db('tictactoe');
+            const collection = db.collection('partidas');
+            collection.findOne({sala:{$eq:result_partida.sala}},{projection:{_id:0, tabuleiro:1}}, function(err, gameboard){
+                if(err) {
+                    console.log('[ERROR] Nao foi possivel obter o gameboard');
+                    res.status(400).json({msg: '[ERROR] Nao foi possivel obter o gameboard'});
+                }
+                console.log('result_partida => ' + JSON.stringify(result_partida));
+                console.log('gameboard => ' + JSON.stringify(gameboard));
+                res.json(gameboard.tabuleiro);
+                client.close();
+                console.log('[INFO] mongo client closed');
+            });
+        });
+    });
 }
 
 module.exports.efetuarJogada = function(application,req,res){

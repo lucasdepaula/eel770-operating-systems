@@ -71,7 +71,7 @@ PartidasDAO.prototype.buscaPartidaByCookie = function(cookie, callback) {
         const collection = db.collection('players');
         collection.findOne(obj, function(err, result){
             if (err) throw err;
-            console.log('buscaPartidaByCookie = '+result);
+            console.log('buscaPartidaByCookie = '+JSON.stringify(result));
             callback(result);
         });
     });

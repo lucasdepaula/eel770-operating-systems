@@ -8,4 +8,7 @@ module.exports = function(app) {
     app.post('/create_room', function(req,res){
         app.app.controllers.game.createroom(app,req,res);
     });
+    app.post('/game/tabuleiro', function(req,res){
+        app.app.controllers.game.getTabuleiro(app,req,res);
+    });
 }
