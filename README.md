@@ -1,5 +1,10 @@
 # Jogo da Velha Online
+Trabalho avaliativo desenvolvido para a disciplina EEL770 - Sistemas Operacionais do curso de Engenharia de Computação e Informação da Escola Politécnica da UFRJ no período 2018-1, sob orientação do professor Pedro Henrique Cruz Caminha.
+## Autores
+Lucas Santos de Paula - lucasdepaula at poli . ufrj . br
+Lucas Vieira - lucasvg at poli . ufrj . br
 
+## Objetivo
 O objetivo desse trabalho é implementar um **jogo da velha** (*tic tac toe*) online que permita múltiplas salas (diversas partidas podem ocorrer simultaneamente entre pares de jogadores).
 
 
