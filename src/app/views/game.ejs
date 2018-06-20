@@ -6,7 +6,11 @@
     </head>
     <body>
         <div class="container">
-            <h1>GameBoard</h1>
+            <h1>
+            GameBoard
+            <button id="encerrar">Encerrar Partida</button>
+            </h1>
+
             <div class="row">
                 <div class="col-md-12">
                     <table id="gameboard">
@@ -50,6 +54,7 @@
             var unique_id = '<%=unique_id%>';
             var chat_channel, game_channel;
             const btnEnviar = document.getElementById('submitChat');
+            const btnEncerrar = document.getElementById('encerrar');
             const logChat = document.getElementById('logChat');
             const inputChat = document.getElementById('inputChat');
             let socket = new ClusterWS({
@@ -116,6 +121,22 @@
                 chat_channel.publish(apelido + ": "+inputChat.value);
                 inputChat.value = "";
             };
+
+            btnEncerrar.onclick = function() { 
+               $.ajax({
+                    type:'POST',
+                    url: '/encerrar',
+                    data: {},
+                    success: function(data, status, xhr){
+                        chat_channel.publish(apelido + " encerrou a partida.");
+                        window.location.replace("/");
+                    },
+                    error: function (err, status, xhr){
+                        logChat.value+="\n" + err.responseJSON.msg;
+                    }
+                });
+            };
+
         </script>
 
     </body>
