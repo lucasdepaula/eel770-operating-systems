@@ -36,4 +36,16 @@ function verificaVitoria(tabs){
             alert('Você perdeu!');
         }
     }
+    else { // verifica velha
+        var cont =0;
+        for(var i =0;i<tabs.length;i++) {
+            if(tabs[i]!=0) {
+                cont++;
+            }
+        }
+        if(cont==tabs.length) {
+            alert('Vocês empataram!');
+            chat_channel.publish('Vocês empataram!');
+        }
+    }
 }
