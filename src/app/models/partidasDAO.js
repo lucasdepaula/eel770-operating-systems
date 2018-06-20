@@ -30,6 +30,14 @@ PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat
         collection.findOne(obj, function(err, result){
             if (err) throw err;
             resultado = result;
+            if(!resultado){
+                console.log('SALA INEXISTENTE!');
+                res.render('index', {validacao:{}, sala_cheia: false, sala_inexistente: true});
+                client.close();
+                return false;
+                // return false;
+            }
+
             console.log(JSON.stringify(resultado));
             if (resultado.players.length<2) {
                 // entra na sala e retorna verdadeiro.
@@ -49,7 +57,7 @@ PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat
             }
             else {
                 console.log('NAO PODE TER MAIS PLAYERS!!');
-                res.render('index', {validacao:{}, sala_cheia: true});
+                res.render('index', {validacao:{}, sala_cheia: true, sala_inexistente: false});
                 client.close();
                 return false;
                 // return false;
