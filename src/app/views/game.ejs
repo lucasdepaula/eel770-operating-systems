@@ -126,7 +126,7 @@
                $.ajax({
                     type:'POST',
                     url: '/encerrar',
-                    data: {},
+                    data: {uniq:unique_id},
                     success: function(data, status, xhr){
                         chat_channel.publish(apelido + " encerrou a partida.");
                         window.location.replace("/");
