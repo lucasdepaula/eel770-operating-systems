@@ -26,7 +26,7 @@ module.exports.show = function(application,req,res){
     var game_channel = crypto.createHmac('sha256', secret_game_channel)
                         .update(dadosForm.sala)
                         .digest('hex');
-    partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido, req, res, chat_channel);
+    partidasDAO.entrarNaPartida(dadosForm.sala, dadosForm.apelido, req, res, chat_channel, game_channel);
         
     partidasDAO.vinculaBrowser(req.headers.cookie, parseInt(dadosForm.sala),2);                   
     
