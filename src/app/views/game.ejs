@@ -47,6 +47,7 @@
         <script>
             var hash_chat_channel = '<%=chat_channel%>';
             var apelido = '<%=apelido%>';
+            var unique_id = '<%=unique_id%>';
             var chat_channel, game_channel;
             const btnEnviar = document.getElementById('submitChat');
             const logChat = document.getElementById('logChat');
@@ -81,7 +82,7 @@
                 $.ajax({
                     type:'POST',
                     url: '/jogada',
-                    data: {ind: id},
+                    data: {ind: id, uniq:unique_id},
                     success: function(data, status, xhr){
                         console.log(data);
                         atualizarTabuleiro();
@@ -98,7 +99,7 @@
                 $.ajax({
                     type:'POST',
                     url: '/game/tabuleiro',
-                    data: {},
+                    data: {uniq:unique_id},
                     success: function(data, status, xhr){
                         console.log(data);
                         pintarTela(data);

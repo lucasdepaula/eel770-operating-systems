@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const secret_unique_id = 'HkKHvYfRTEaeDByrD^aeeCg#FDiM7x0Y2$iGNyrIjeqkNUnCSI';
 function PartidasDAO(conexao){
     this._conexao = conexao;
     //console.log(conexao);
@@ -34,7 +36,12 @@ PartidasDAO.prototype.entrarNaPartida = function(numero, jogador, req, res, chat
                 console.log(resultado.players);
                 collection.updateOne(obj, {$push:{players:{apelido: jogador}}}, function(err, result){
                     if (err) throw err;
-                    res.render('game',{apelido: dadosForm.apelido, room_number: parseInt(req.body.sala), msgLog: "Você foi conectado a sala "+req.body.sala+" a partida será iniciada em instantes.",chat_channel:chat, game_channel: game_channel});
+                    var unique_id = req.headers.cookie + numero + 2;
+                    unique_id = crypto.createHmac('sha256', secret_unique_id)
+                    .update(unique_id)
+                    .digest('hex');
+                    console.log('unique_id-user => ' + unique_id);
+                    res.render('game',{apelido: dadosForm.apelido, room_number: parseInt(req.body.sala), msgLog: "Você foi conectado a sala "+req.body.sala+" a partida será iniciada em instantes.",chat_channel:chat, game_channel: game_channel, unique_id: unique_id});
                     client.close();
                     return true;
                 });
