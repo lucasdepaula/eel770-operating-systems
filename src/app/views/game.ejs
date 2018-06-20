@@ -53,6 +53,7 @@
             var apelido = '<%=apelido%>';
             var unique_id = '<%=unique_id%>';
             var chat_channel, game_channel;
+            var game_channel_last_message;
             const btnEnviar = document.getElementById('submitChat');
             const btnEncerrar = document.getElementById('encerrar');
             const logChat = document.getElementById('logChat');
@@ -75,6 +76,7 @@
                         logChat.scrollTop = logChat.scrollHeight;
                         atualizarTabuleiro();
                     }
+                    game_channel_last_message = channelMessage;
                 });
             });
             socket.on('iniciarPartida', function(){
@@ -108,6 +110,7 @@
                     success: function(data, status, xhr){
                         console.log(data);
                         pintarTela(data);
+                        verificaVitoria(data);
                     },
                     error: function (err, status, xhr){
                         logChat.value+="\n" + err.responseJSON.msg;

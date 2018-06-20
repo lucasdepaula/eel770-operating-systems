@@ -15,3 +15,25 @@ function pintarTela(tabs) {
     }
     //$('#gameboard button:eq('+id+')').text("O");
 }
+
+function verificaVitoria(tabs){
+    if(
+        ((tabs[0] != 0) && (tabs[0] == tabs[3]) && (tabs[3] == tabs[6])) ||
+        ((tabs[1] != 0) && (tabs[1] == tabs[4]) && (tabs[4] == tabs[7])) ||
+        ((tabs[2] != 0) && (tabs[2] == tabs[5]) && (tabs[5] == tabs[8])) ||
+        ((tabs[0] != 0) && (tabs[0] == tabs[1]) && (tabs[1] == tabs[2])) ||
+        ((tabs[3] != 0) && (tabs[3] == tabs[4]) && (tabs[4] == tabs[5])) ||
+        ((tabs[6] != 0) && (tabs[6] == tabs[7]) && (tabs[7] == tabs[8])) ||
+        ((tabs[0] != 0) && (tabs[0] == tabs[4]) && (tabs[4] == tabs[8])) ||
+        ((tabs[2] != 0) && (tabs[2] == tabs[4]) && (tabs[4] == tabs[6]))
+
+    ){
+        // vitoria ocorreu
+        if(game_channel_last_message == apelido + ' jogou') {
+            alert('Você ganhou!');
+            chat_channel.publish(apelido + ' ganhou!');
+        } else {
+            alert('Você perdeu!');
+        }
+    }
+}
