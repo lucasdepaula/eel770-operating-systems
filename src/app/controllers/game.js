@@ -45,7 +45,7 @@ module.exports.createroom = function(application,req,res){
     var erros = req.validationErrors();
 
     if(erros){
-        res.render("index", {validacao : erros, sala_cheia:false})
+        res.render("index", {validacao : erros, sala_cheia:false, sala_inexistente:false})
         return;
     }
     var connection = application.config.dbconnection;
