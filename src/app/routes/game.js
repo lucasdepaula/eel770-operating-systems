@@ -11,4 +11,7 @@ module.exports = function(app) {
     app.post('/game/tabuleiro', function(req,res){
         app.app.controllers.game.getTabuleiro(app,req,res);
     });
+    app.post('/encerrar', function(req,res){
+        app.app.controllers.game.encerrar(app,req,res);
+    });
 }

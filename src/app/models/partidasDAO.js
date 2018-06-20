@@ -64,6 +64,7 @@ PartidasDAO.prototype.vinculaBrowser = function(identificador, sala, id_jogo) {
 }
 
 PartidasDAO.prototype.buscaPartidaByCookie = function(cookie, callback) {
+    console.log('cookie'+cookie)
     var obj = {player:{$eq:cookie}};
     var MongoClient = require('mongodb').MongoClient;
     MongoClient.connect(this._conexao,function(err, client){
@@ -71,9 +72,21 @@ PartidasDAO.prototype.buscaPartidaByCookie = function(cookie, callback) {
         const collection = db.collection('players');
         collection.findOne(obj, function(err, result){
             if (err) throw err;
-            console.log('buscaPartidaByCookie = '+JSON.stringify(result));
+            console.log('buscaPartidaByCookie = '+result);
             callback(result);
         });
+    });
+}
+
+PartidasDAO.prototype.encerrar = function(sala_id) {
+    var obj = {sala:sala_id};
+    var MongoClient = require('mongodb').MongoClient;
+    MongoClient.connect(this._conexao,function(err, client){
+        const db = client.db('tictactoe');
+        var collection = db.collection('players');
+        collection.remove(obj);
+        collection = db.collection('partidas');
+        collection.remove(obj);
     });
 }
 
